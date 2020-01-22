@@ -1,0 +1,110 @@
+body {
+    background: darkblue;
+    padding: 5px;
+}
+
+#gameScreen {
+    border: 1px solid black;
+
+}
+
+#canvas {
+    background: lightskyblue;
+    
+  }
+
+.text {
+    
+    font-family: 'Courier Prime', monospace;
+    
+} 
+
+.head-size {
+    color: lightcoral;
+    font-size: 60px;
+    text-align: center;
+}
+
+.text-size {
+    color: lightsalmon;
+    font-size: 20px;
+}
+
+.position {
+    font-size: 50px;
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+
+  #objects {
+    position: absolute;
+    top: 1px;
+    left: -70px;
+  }
+  #monkey {
+      position: absolute;
+      top: 140px;
+      
+  }
+  #fire {
+      position: absolute;
+      top: 140px;
+  }
+  #frizbee {
+    position: absolute;
+    top: 140px;
+  }
+
+  #bear {
+    position: absolute;
+    top: 140px;
+  }
+
+  #balloon {
+    position: absolute;
+    top: 140px;
+  }
+
+  #panda {
+    position: absolute;
+    top: 140px;
+  }
+
+  #squirrel {
+    position: absolute;
+    top: 140px;
+  }
+
+  #rain {
+    position: absolute;
+    top: 140px;
+  }
+
+  #ball {
+    position: absolute;
+    top: 140px;
+  }
+
+  #small-smile {
+      position: absolute;
+      top: 130px;
+      left: 84px;
+      font-size: 55px;
+  }
+  img {
+    display: block;
+    max-width:1250px;
+    max-height:200px;
+    min-width:1250px;
+    min-height:200px;
+    width: auto;
+    height: auto;
+  }
+
+  
+
+
