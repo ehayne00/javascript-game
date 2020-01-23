@@ -1,5 +1,40 @@
 document.addEventListener("DOMContentLoaded", ()=>{
+  const gamesUrl = "http://localhost:3000/games/"
+  const userUrl = "http://localhost:3000/users/"
 
+  function get(url) {
+    return fetch(url)
+    .then(resp => resp.json())
+  }
+
+  function destroy(url, id){
+    return fetch(`${url}${id}`, {
+      method: "DELETE"
+    })
+  }
+
+  function getGames(){
+    get(gamesUrl)
+    .then(games => games.forEach(renderScores))
+  }
+
+  function renderScores(game){
+    const scoresUl = document.querySelector("#scores")
+    const newLi = document.createElement("li")
+    newLi.innerText= `Name: ${game.username}, Score: ${game.score}`
+    const deleteBtn = document.createElement("button")
+    deleteBtn.innerText = "delete score"
+
+    scoresUl.append(newLi, deleteBtn)
+    deleteBtn.addEventListener("click", () => deleteScore(game, newLi, deleteBtn))
+  }
+
+  function deleteScore(game, newLi, deleteBtn){
+    destroy(gamesUrl, game.id).then(()=> newLi.remove(), deleteBtn.remove())
+  }
+
+
+  getGames()
   //initial loaded CONSTANTS
   let startBtn = document.querySelector("#start") 
   startBtn.addEventListener("click", startGame)
@@ -15,7 +50,7 @@ let counter = document.querySelector("#counter")
 function startGame() {
     
   let startBtn = document.querySelector("#start")
-  setInterval(incrementCounter, 1000);
+  const intervalCount = setInterval(incrementCounter, 1000);
 
   startBtn.style.visibility = "hidden";
   let form = document.querySelector("#add-form")
@@ -32,9 +67,31 @@ function startGame() {
 
   movingObjects();
 
-  form.addEventListener("submit", (event)=>checkWordsTyped(event, form))
+  // form.addEventListener("submit", (event)=>collectWordsTyped(event, form))
+  let words = [];
+  form.addEventListener("submit", function(e){
+    e.preventDefault()
     
-}
+    let word = event.target.answer.value;
+    words.push(word)
+    form.reset()
+    
+  })
+
+  
+  setTimeout(()=> interval1(words), 7000)
+  setTimeout(()=> interval2(words), 17000)
+  setTimeout(()=> interval3(words), 26000)
+  setTimeout(()=> interval4(words), 36000)
+  setTimeout(()=> interval5(words, intervalCount), 44000)
+  setTimeout(()=> interval6(words, intervalCount), 53000)
+  setTimeout(()=> interval7(words, intervalCount), 61000)
+  setTimeout(()=> interval8(words, intervalCount), 69000)
+  setTimeout(()=> interval9(words, intervalCount), 78000)
+
+
+} 
+
 
 
 
@@ -111,36 +168,210 @@ function incrementCounter(){
   counter.textContent = counterNumber 
 }
 
+ 
+const smallSmile = document.createElement("div")
 
-function checkWordsTyped(event, form) {
-  
-  event.preventDefault()
-    
-  let counterText = counter.textContent
-  let counterNumber = parseInt(counterText)
+function interval1(words){
+    const result = words.filter(word => word === "banana")
+    if (result.length !== 1) {
 
-  let words = [];
-  let word = event.target.answer.value;
-  words.push(word)
-    //re-write tommorrow. I want to say, WHEN the counter is at 6, check the words array for "banana".
-  const result = words.filter(word => word === "banana") //if result does not contain banana,
-  if(counterNumber < 6  && result.length !== 1 ) {
-      
-      let smallSmile = document.createElement("div")
       smallSmile.innerText = '🙂'
       smallSmile.id = "small-smile"
       let objectsDiv = document.querySelector("#objects")
       objectsDiv.append(smallSmile)
-      
+
     }
-    
-    form.reset();
-  }  
+}
 
+function interval2(words){
+  const result2 = words.filter(word => word === "honey")
+    if (result2.length !== 1) {
+       if (smallSmile.innerText === '🙂'){
+         smallSmile.innerText = '😑'
+       }
+       else {
+         smallSmile.innerText = '🙂'
+        smallSmile.id = "small-smile"
+      let objectsDiv = document.querySelector("#objects")
+      objectsDiv.append(smallSmile)
+       }
+    }
+}
 
+function interval3(words){
+  const result3 = words.filter(word => word === "pop")
+    if (result3.length !== 1) {
+      if (smallSmile.innerText === '😑'){
+        smallSmile.innerText = '😔'
+      }
+      else if (smallSmile.innerText === '🙂'){
+        smallSmile.innerText = '😑'
+      }
+      else {
+        smallSmile.innerText = '🙂'
+        smallSmile.id = "small-smile"
+      let objectsDiv = document.querySelector("#objects")
+      objectsDiv.append(smallSmile)
+      }
+    }
+}
 
+function interval4(words){
+    const result4 = words.filter(word => word === "bamboo")
+    if (result4.length !== 1) {
+      if (smallSmile.innerText === '😔'){
+        smallSmile.innerText = '🤕'
+      }
+      else if(smallSmile.innerText === '😑') {
+        smallSmile.innerText = '😔'
+      }
+      else if (smallSmile.innerText === '🙂'){
+        smallSmile.innerText = '😑'
+      }
+      else{
+        smallSmile.innerText ='🙂'
+        smallSmile.id = "small-smile"
+      let objectsDiv = document.querySelector("#objects")
+      objectsDiv.append(smallSmile)
+      }
+    }
+}
 
+function interval5(words){
+    const result5 = words.filter(word => word === "catch")
+    if(result5.length !== 1){
+      if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(intervalCount)
+      }
+      else if (smallSmile.innerText === '😔'){
+        smallSmile.innerText = '🤕'
+      }
+      else if(smallSmile.innerText === '😑') {
+        smallSmile.innerText = '😔'
+      }
+      else if (smallSmile.innerText === '🙂'){
+        smallSmile.innerText = '😑'
+      }
+      else{
+        smallSmile.innerText ='🙂'
+        smallSmile.id = "small-smile"
+      let objectsDiv = document.querySelector("#objects")
+      objectsDiv.append(smallSmile)
+      }
+    }
+}
 
+function interval6(words){
+    const result5 = words.filter(word => word === "nut")
+    if(result5.length !== 1){
+      if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(intervalCount)
+      }
+      else if (smallSmile.innerText === '😔'){
+        smallSmile.innerText = '🤕'
+      }
+      else if(smallSmile.innerText === '😑') {
+        smallSmile.innerText = '😔'
+      }
+      else if (smallSmile.innerText === '🙂'){
+        smallSmile.innerText = '😑'
+      }
+      else{
+        smallSmile.innerText ='🙂'
+        smallSmile.id = "small-smile"
+      let objectsDiv = document.querySelector("#objects")
+      objectsDiv.append(smallSmile)
+      }
+    }
+}
 
+function interval7(words){
+    const result5 = words.filter(word => word === "water")
+    if(result5.length !== 1){
+      if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(intervalCount)
+      }
+      else if (smallSmile.innerText === '😔'){
+        smallSmile.innerText = '🤕'
+      }
+      else if(smallSmile.innerText === '😑') {
+        smallSmile.innerText = '😔'
+      }
+      else if (smallSmile.innerText === '🙂'){
+        smallSmile.innerText = '😑'
+      }
+      else{
+        smallSmile.innerText ='🙂'
+        smallSmile.id = "small-smile"
+      let objectsDiv = document.querySelector("#objects")
+      objectsDiv.append(smallSmile)
+      }
+    }
+}
 
+function interval8(words){
+    const result5 = words.filter(word => word === "kick")
+    if(result5.length !== 1){
+      if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(intervalCount)
+      }
+      else if (smallSmile.innerText === '😔'){
+        smallSmile.innerText = '🤕'
+      }
+      else if(smallSmile.innerText === '😑') {
+        smallSmile.innerText = '😔'
+      }
+      else if (smallSmile.innerText === '🙂'){
+        smallSmile.innerText = '😑'
+      }
+      else{
+        smallSmile.innerText ='🙂'
+        smallSmile.id = "small-smile"
+      let objectsDiv = document.querySelector("#objects")
+      objectsDiv.append(smallSmile)
+      }
+    }
+}
+
+function interval9(words){
+    const result5 = words.filter(word => word === "umbrella")
+    if(result5.length !== 1){
+      if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(intervalCount)
+      }
+      else if (smallSmile.innerText === '😔'){
+        smallSmile.innerText = '🤕'
+      }
+      else if(smallSmile.innerText === '😑') {
+        smallSmile.innerText = '😔'
+      }
+      else if (smallSmile.innerText === '🙂'){
+        smallSmile.innerText = '😑'
+      }
+      else{
+        smallSmile.innerText ='🙂'
+        smallSmile.id = "small-smile"
+      let objectsDiv = document.querySelector("#objects")
+      objectsDiv.append(smallSmile)
+      youWin(intervalCount)
+      }
+    }
+}
+
+function endGame(){
+clearInterval(intervalCount)
+const scoreP = document.createElement("p")
+
+console.log("game over")
+}
+
+function youWin(){
+  clearInterval(intervalCount)
+  console.log("you win!")
+}
 
