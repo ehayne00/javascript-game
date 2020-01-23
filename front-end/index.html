@@ -14,7 +14,7 @@
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.0.0/gsap.min.js" width="1200px" height="200px"></script>
 <div class="container">
-    <img src='/Users/admin/Development/code/javascript-game/front-end/images/game image.png' style="width:100%;">
+    <img id="container-image" src='/Users/admin/Development/code/javascript-game/front-end/images/game image.png' style="width:100%;">
     <div id="objects"></div>
 </div>
     
@@ -26,20 +26,20 @@
 </h2>
 <h2 class="text text-size animated fadeInDown">
     <u>INSTRUCTIONS</u>:
-    - as soon as an object/animal appears, type a word solution followed by the enter/submit key. (Example: if the object is fire, you may want to try typing "water" and press enter!)
+    - as soon as an object/animal appears, type a word solution followed by the enter/submit key/button. (Example: if the object is fire, you may want to try typing "water" and press enter!)
     If the word solution is correct and is typed before the object/animal reaches Harry, it won't hurt him!
-    If you do not type the correct solution before the object/animal reaches him, he will lose a life.
+    If you do not type the correct solution before the object/animal reaches him, he will lose a life and his face will change.
     Harry has 5 lives in total. See how far you can get!
 </h2>
-<!-- <p class="text text-size animated fadeInDown">Enter your name:</p>
+<p id="name-p" class="text text-size animated fadeInDown">Enter your name to play:</p>
 <form id="user-form">
   <input type="text" name="name">
   <input type="submit">
-</form> -->
+</form>
 <button id='start'>START GAME</button><h2 class="text text-size animated fadeInDown">Time:<h2 id='counter' class="text text-size animated fadeInDown">
     0
   </h2><form id="add-form"></form></h2>
-<h2 class="text text-size animated fadeInDown"><ul id="scores"><u>Scores:</u></ul></h2>
+<h2 class="text text-size animated fadeInDown"><p id="score-instance" style="color:red"></p><ul id="scores"><u>Scores:</u></ul></h2>
 
 
 

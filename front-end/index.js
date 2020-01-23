@@ -1,9 +1,22 @@
+
 document.addEventListener("DOMContentLoaded", ()=>{
   const gamesUrl = "http://localhost:3000/games/"
   const userUrl = "http://localhost:3000/users/"
 
   function get(url) {
     return fetch(url)
+    .then(resp => resp.json())
+  }
+
+  function post(url, obj) {
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(obj)
+    })
     .then(resp => resp.json())
   }
 
@@ -33,28 +46,73 @@ document.addEventListener("DOMContentLoaded", ()=>{
     destroy(gamesUrl, game.id).then(()=> newLi.remove(), deleteBtn.remove())
   }
 
+  function postUserThenRender(e){
+
+    e.preventDefault()
+    
+    let bodyObj = {
+      name: event.target.name.value
+    }
+  
+    post(userUrl, bodyObj)
+    .then(user => renderUser(user), startBtn.addEventListener("click", startGame(user)))
+  
+    
+    nameForm.style.visibility = "hidden"
+  
+  }
+
+  function renderUser(user){
+    appendName.innerText= `You are playing as ${user.name}`
+  }
+
+  
 
   getGames()
   //initial loaded CONSTANTS
-  let startBtn = document.querySelector("#start") 
-  startBtn.addEventListener("click", startGame)
+  
+  nameForm.addEventListener("submit", (e)=> postUserThenRender(e))
+
 
 })
 
 
 //global variables
-let counter = document.querySelector("#counter")
+const counter = document.querySelector("#counter")
+const startBtn = document.querySelector("#start")
+const nameForm = document.querySelector("#user-form")
+const form = document.querySelector("#add-form")
+const smallSmile = document.createElement("div")
+const containerImage = document.querySelector("#container-image")
+const appendScore = document.querySelector("#score-instance")
+const yourScore = document.createElement("p")
+yourScore.id = "your-score"
+let objectsDiv = document.querySelector("#objects")
+
+const appendName = document.querySelector("#name-p")
 
 
 //functions
-function startGame() {
-    
-  let startBtn = document.querySelector("#start")
+
+
+
+
+function startGame(user) {
+
+  counter.innerText = "0"
+  if (appendScore.hasChildNodes === yourScore){
+  appendScore.removeChild(yourScore)
+  }
+  if (smallSmile){
+    smallSmile.remove()
+  }
+  yourScore.innerText = ""
+
+  containerImage.src = "/Users/admin/Development/code/javascript-game/front-end/images/game image.png"
   const intervalCount = setInterval(incrementCounter, 1000);
 
   startBtn.style.visibility = "hidden";
-  let form = document.querySelector("#add-form")
-
+  
   let inputField = document.createElement("input")
   inputField.type = "text"
   inputField.name = "answer"
@@ -67,7 +125,6 @@ function startGame() {
 
   movingObjects();
 
-  // form.addEventListener("submit", (event)=>collectWordsTyped(event, form))
   let words = [];
   form.addEventListener("submit", function(e){
     e.preventDefault()
@@ -83,11 +140,11 @@ function startGame() {
   setTimeout(()=> interval2(words), 17000)
   setTimeout(()=> interval3(words), 26000)
   setTimeout(()=> interval4(words), 36000)
-  setTimeout(()=> interval5(words, intervalCount), 44000)
-  setTimeout(()=> interval6(words, intervalCount), 53000)
-  setTimeout(()=> interval7(words, intervalCount), 61000)
-  setTimeout(()=> interval8(words, intervalCount), 69000)
-  setTimeout(()=> interval9(words, intervalCount), 78000)
+  setTimeout(()=> interval5(words, user, intervalCount), 44000)
+  setTimeout(()=> interval6(words, user, intervalCount), 53000)
+  setTimeout(()=> interval7(words, user, intervalCount), 61000)
+  setTimeout(()=> interval8(words, user, intervalCount), 69000)
+  setTimeout(()=> interval9(words, user, intervalCount), 78000)
 
 
 } 
@@ -142,11 +199,13 @@ function movingObjects() {
   squirrelDiv.id = "squirrel" 
   squirrelDiv.className = "position"
 
-  let objectsDiv = document.querySelector("#objects")
+  
   objectsDiv.append(monkeyDiv, fireDiv, rainDiv, ballDiv, frizbeeDiv, balloonDiv, bearDiv, pandaDiv, squirrelDiv);
 
   let tl = gsap.timeline();
 
+  
+     
   tl.from("#monkey", {duration:10, opacity: 0, x:1400});
   tl.from("#bear", {duration:9, opacity: 0, x:1400, y:-50});
   tl.from("#balloon", {duration:10, opacity:0, x:1400, y:-100});
@@ -156,6 +215,8 @@ function movingObjects() {
   tl.from("#fire", {duration:8, opacity:0, x:1400});
   tl.from("#ball", {duration:9, opacity: 0, x:1400, y:-90});
   tl.from("#rain", {duration:8, opacity:0, x:1400, y:-150});
+  
+  
 }
 
 
@@ -169,7 +230,7 @@ function incrementCounter(){
 }
 
  
-const smallSmile = document.createElement("div")
+
 
 function interval1(words){
     const result = words.filter(word => word === "banana")
@@ -192,8 +253,8 @@ function interval2(words){
        else {
          smallSmile.innerText = '🙂'
         smallSmile.id = "small-smile"
-      let objectsDiv = document.querySelector("#objects")
-      objectsDiv.append(smallSmile)
+        let objectsDiv = document.querySelector("#objects")
+        objectsDiv.append(smallSmile)
        }
     }
 }
@@ -210,8 +271,8 @@ function interval3(words){
       else {
         smallSmile.innerText = '🙂'
         smallSmile.id = "small-smile"
-      let objectsDiv = document.querySelector("#objects")
-      objectsDiv.append(smallSmile)
+        let objectsDiv = document.querySelector("#objects")
+        objectsDiv.append(smallSmile)
       }
     }
 }
@@ -231,18 +292,18 @@ function interval4(words){
       else{
         smallSmile.innerText ='🙂'
         smallSmile.id = "small-smile"
-      let objectsDiv = document.querySelector("#objects")
-      objectsDiv.append(smallSmile)
+        let objectsDiv = document.querySelector("#objects")
+        objectsDiv.append(smallSmile)
       }
     }
 }
 
-function interval5(words){
+function interval5(words, user, intervalCount){
     const result5 = words.filter(word => word === "catch")
     if(result5.length !== 1){
       if (smallSmile.innerText === '🤕'){
         smallSmile.innerText = '💀'
-        endGame(intervalCount)
+        endGame(user, intervalCount)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
@@ -256,18 +317,21 @@ function interval5(words){
       else{
         smallSmile.innerText ='🙂'
         smallSmile.id = "small-smile"
-      let objectsDiv = document.querySelector("#objects")
-      objectsDiv.append(smallSmile)
+        let objectsDiv = document.querySelector("#objects")
+        objectsDiv.append(smallSmile)
       }
     }
 }
 
-function interval6(words){
+function interval6(words, user, intervalCount){
     const result5 = words.filter(word => word === "nut")
     if(result5.length !== 1){
-      if (smallSmile.innerText === '🤕'){
+      if (smallSmile.innerText === '💀'){
         smallSmile.innerText = '💀'
-        endGame(intervalCount)
+      }
+      else if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(user, intervalCount)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
@@ -281,18 +345,21 @@ function interval6(words){
       else{
         smallSmile.innerText ='🙂'
         smallSmile.id = "small-smile"
-      let objectsDiv = document.querySelector("#objects")
-      objectsDiv.append(smallSmile)
+        let objectsDiv = document.querySelector("#objects")
+        objectsDiv.append(smallSmile)
       }
     }
 }
 
-function interval7(words){
+function interval7(words, user, intervalCount){
     const result5 = words.filter(word => word === "water")
     if(result5.length !== 1){
-      if (smallSmile.innerText === '🤕'){
+      if (smallSmile.innerText === '💀'){
         smallSmile.innerText = '💀'
-        endGame(intervalCount)
+      }
+      else if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(user, intervalCount)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
@@ -306,18 +373,21 @@ function interval7(words){
       else{
         smallSmile.innerText ='🙂'
         smallSmile.id = "small-smile"
-      let objectsDiv = document.querySelector("#objects")
-      objectsDiv.append(smallSmile)
+        let objectsDiv = document.querySelector("#objects")
+        objectsDiv.append(smallSmile)
       }
     }
 }
 
-function interval8(words){
+function interval8(words, user, intervalCount){
     const result5 = words.filter(word => word === "kick")
     if(result5.length !== 1){
-      if (smallSmile.innerText === '🤕'){
+      if (smallSmile.innerText === '💀'){
         smallSmile.innerText = '💀'
-        endGame(intervalCount)
+      }
+      else if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(user, intervalCount)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
@@ -331,47 +401,73 @@ function interval8(words){
       else{
         smallSmile.innerText ='🙂'
         smallSmile.id = "small-smile"
-      let objectsDiv = document.querySelector("#objects")
-      objectsDiv.append(smallSmile)
+        let objectsDiv = document.querySelector("#objects")
+        objectsDiv.append(smallSmile)
       }
     }
 }
 
-function interval9(words){
+function interval9(words, user, intervalCount){
     const result5 = words.filter(word => word === "umbrella")
     if(result5.length !== 1){
-      if (smallSmile.innerText === '🤕'){
+      if (smallSmile.innerText === '💀'){
         smallSmile.innerText = '💀'
-        endGame(intervalCount)
+
+      }
+      else if (smallSmile.innerText === '🤕'){
+        smallSmile.innerText = '💀'
+        endGame(user, intervalCount)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
+        youWin(user, intervalCount)
       }
       else if(smallSmile.innerText === '😑') {
         smallSmile.innerText = '😔'
+        youWin(user, intervalCount)
       }
       else if (smallSmile.innerText === '🙂'){
         smallSmile.innerText = '😑'
+        youWin(user, intervalCount)
       }
       else{
         smallSmile.innerText ='🙂'
         smallSmile.id = "small-smile"
       let objectsDiv = document.querySelector("#objects")
       objectsDiv.append(smallSmile)
-      youWin(intervalCount)
+      youWin(user, intervalCount)
       }
+    } else if (result5.length === 1){
+      youWin(user, intervalCount)
     }
+    
 }
 
-function endGame(){
-clearInterval(intervalCount)
-const scoreP = document.createElement("p")
+function endGame(user, intervalCount){
+  clearInterval(intervalCount)
+  startBtn.style.visibility = "visible";
+  form.innerHTML = ""
+  containerImage.src = "/Users/admin/Development/code/javascript-game/front-end/images/gameover-pic.png"
+  objectsDiv.innerHTML =""
+  
+
+  
+  yourScore.innerText = `Your score: ${Number(counter.innerText) * 1000}`
+  appendScore.append(yourScore)
 
 console.log("game over")
 }
 
-function youWin(){
+function youWin(user, intervalCount){
+  startBtn.style.visibility = "visible";
   clearInterval(intervalCount)
+  form.innerHTML = ""
+  containerImage.src = "/Users/admin/Development/code/javascript-game/front-end/images/youwin-pic.png"
+
+
+  yourScore.innerText = `Your score: ${Number(counter.innerText) * 1000}`
+  appendScore.append(yourScore)
+
   console.log("you win!")
 }
 
