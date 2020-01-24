@@ -1,12 +1,16 @@
 
-document.addEventListener("DOMContentLoaded", ()=>{
-  const gamesUrl = "http://localhost:3000/games/"
-  const userUrl = "http://localhost:3000/users/"
+
+//write myself a guide for using the serializer gabe showed..
+
+
+  //fetches
+
 
   function get(url) {
     return fetch(url)
     .then(resp => resp.json())
   }
+
 
   function post(url, obj) {
     return fetch(url, {
@@ -20,16 +24,37 @@ document.addEventListener("DOMContentLoaded", ()=>{
     .then(resp => resp.json())
   }
 
+
   function destroy(url, id){
     return fetch(`${url}${id}`, {
       method: "DELETE"
     })
   }
 
+
+  //global variables
+const counter = document.querySelector("#counter")
+const startBtn = document.querySelector("#start")
+const nameForm = document.querySelector("#user-form")
+
+const smallSmile = document.createElement("div")
+const containerImage = document.querySelector("#container-image")
+const appendScore = document.querySelector("#score-instance")
+const yourScore = document.createElement("p")
+yourScore.id = "your-score"
+const objectsDiv = document.querySelector("#objects")
+const form = document.getElementById("add-form")
+const appendName = document.querySelector("#name-p")
+const gamesUrl = "http://localhost:3000/games/"
+const userUrl = "http://localhost:3000/users/"
+
+//functions
+
   function getGames(){
     get(gamesUrl)
     .then(games => games.forEach(renderScores))
   }
+
 
   function renderScores(game){
     const scoresUl = document.querySelector("#scores")
@@ -42,63 +67,43 @@ document.addEventListener("DOMContentLoaded", ()=>{
     deleteBtn.addEventListener("click", () => deleteScore(game, newLi, deleteBtn))
   }
 
+
   function deleteScore(game, newLi, deleteBtn){
-    destroy(gamesUrl, game.id).then(()=> newLi.remove(), deleteBtn.remove())
+    destroy(gamesUrl, game.id).then(()=>{ 
+      newLi.remove();
+      deleteBtn.remove()
+    })
   }
+
 
   function postUserThenRender(e){
 
     e.preventDefault()
     
-    let bodyObj = {
+    let userDetails = {
       name: event.target.name.value
     }
+
+    let userObject = {
+      user: userDetails
+    }
   
-    post(userUrl, bodyObj)
-    .then(user => renderUser(user), startBtn.addEventListener("click", startGame(user)))
+    post(userUrl, userObject)
+    .then(user => {renderUser(user), startBtn.addEventListener("click", ()=> startGame(user))})
   
-    
+    nameForm.reset()
     nameForm.style.visibility = "hidden"
-  
+    
   }
+
 
   function renderUser(user){
-    appendName.innerText= `You are playing as ${user.name}`
+    appendName.innerHTML= `You are playing as: <u>${user.name}</u>`
   }
 
-  
 
-  getGames()
-  //initial loaded CONSTANTS
-  
-  nameForm.addEventListener("submit", (e)=> postUserThenRender(e))
-
-
-})
-
-
-//global variables
-const counter = document.querySelector("#counter")
-const startBtn = document.querySelector("#start")
-const nameForm = document.querySelector("#user-form")
-const form = document.querySelector("#add-form")
-const smallSmile = document.createElement("div")
-const containerImage = document.querySelector("#container-image")
-const appendScore = document.querySelector("#score-instance")
-const yourScore = document.createElement("p")
-yourScore.id = "your-score"
-let objectsDiv = document.querySelector("#objects")
-
-const appendName = document.querySelector("#name-p")
-
-
-//functions
-
-
-
-
-function startGame(user) {
-
+ function startGame(user) {
+  form.innerHTML = ""
   counter.innerText = "0"
   if (appendScore.hasChildNodes === yourScore){
   appendScore.removeChild(yourScore)
@@ -109,7 +114,8 @@ function startGame(user) {
   yourScore.innerText = ""
 
   containerImage.src = "/Users/admin/Development/code/javascript-game/front-end/images/game image.png"
-  const intervalCount = setInterval(incrementCounter, 1000);
+  
+  let intervalCount = setInterval(incrementCounter, 1000);
 
   startBtn.style.visibility = "hidden";
   
@@ -120,7 +126,7 @@ function startGame(user) {
 
   let submitBtn = document.createElement("input")
   submitBtn.type = "submit"
-
+  
   form.append(inputField, submitBtn)
 
   movingObjects();
@@ -140,16 +146,14 @@ function startGame(user) {
   setTimeout(()=> interval2(words), 17000)
   setTimeout(()=> interval3(words), 26000)
   setTimeout(()=> interval4(words), 36000)
-  setTimeout(()=> interval5(words, user, intervalCount), 44000)
-  setTimeout(()=> interval6(words, user, intervalCount), 53000)
-  setTimeout(()=> interval7(words, user, intervalCount), 61000)
-  setTimeout(()=> interval8(words, user, intervalCount), 69000)
-  setTimeout(()=> interval9(words, user, intervalCount), 78000)
+  setTimeout(()=> interval5(words, user, intervalCount, form), 44000)
+  setTimeout(()=> interval6(words, user, intervalCount, form), 53000)
+  setTimeout(()=> interval7(words, user, intervalCount, form), 61000)
+  setTimeout(()=> interval8(words, user, intervalCount, form), 69000)
+  setTimeout(()=> interval9(words, user, intervalCount, form), 78000)
 
 
 } 
-
-
 
 
 function movingObjects() {
@@ -204,7 +208,6 @@ function movingObjects() {
 
   let tl = gsap.timeline();
 
-  
      
   tl.from("#monkey", {duration:10, opacity: 0, x:1400});
   tl.from("#bear", {duration:9, opacity: 0, x:1400, y:-50});
@@ -216,10 +219,7 @@ function movingObjects() {
   tl.from("#ball", {duration:9, opacity: 0, x:1400, y:-90});
   tl.from("#rain", {duration:8, opacity:0, x:1400, y:-150});
   
-  
 }
-
-
 
 
 function incrementCounter(){
@@ -228,8 +228,6 @@ function incrementCounter(){
   counterNumber +=1
   counter.textContent = counterNumber 
 }
-
- 
 
 
 function interval1(words){
@@ -243,6 +241,7 @@ function interval1(words){
 
     }
 }
+
 
 function interval2(words){
   const result2 = words.filter(word => word === "honey")
@@ -258,6 +257,7 @@ function interval2(words){
        }
     }
 }
+
 
 function interval3(words){
   const result3 = words.filter(word => word === "pop")
@@ -276,6 +276,7 @@ function interval3(words){
       }
     }
 }
+
 
 function interval4(words){
     const result4 = words.filter(word => word === "bamboo")
@@ -298,12 +299,13 @@ function interval4(words){
     }
 }
 
-function interval5(words, user, intervalCount){
+
+function interval5(words, user, intervalCount, form){
     const result5 = words.filter(word => word === "catch")
     if(result5.length !== 1){
       if (smallSmile.innerText === '🤕'){
         smallSmile.innerText = '💀'
-        endGame(user, intervalCount)
+        endGame(user, intervalCount, form)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
@@ -323,7 +325,8 @@ function interval5(words, user, intervalCount){
     }
 }
 
-function interval6(words, user, intervalCount){
+
+function interval6(words, user, intervalCount, form){
     const result5 = words.filter(word => word === "nut")
     if(result5.length !== 1){
       if (smallSmile.innerText === '💀'){
@@ -331,7 +334,7 @@ function interval6(words, user, intervalCount){
       }
       else if (smallSmile.innerText === '🤕'){
         smallSmile.innerText = '💀'
-        endGame(user, intervalCount)
+        endGame(user, intervalCount, form)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
@@ -351,7 +354,8 @@ function interval6(words, user, intervalCount){
     }
 }
 
-function interval7(words, user, intervalCount){
+
+function interval7(words, user, intervalCount, form){
     const result5 = words.filter(word => word === "water")
     if(result5.length !== 1){
       if (smallSmile.innerText === '💀'){
@@ -359,7 +363,7 @@ function interval7(words, user, intervalCount){
       }
       else if (smallSmile.innerText === '🤕'){
         smallSmile.innerText = '💀'
-        endGame(user, intervalCount)
+        endGame(user, intervalCount, form)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
@@ -379,7 +383,8 @@ function interval7(words, user, intervalCount){
     }
 }
 
-function interval8(words, user, intervalCount){
+
+function interval8(words, user, intervalCount, form){
     const result5 = words.filter(word => word === "kick")
     if(result5.length !== 1){
       if (smallSmile.innerText === '💀'){
@@ -387,7 +392,7 @@ function interval8(words, user, intervalCount){
       }
       else if (smallSmile.innerText === '🤕'){
         smallSmile.innerText = '💀'
-        endGame(user, intervalCount)
+        endGame(user, intervalCount, form)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
@@ -407,7 +412,8 @@ function interval8(words, user, intervalCount){
     }
 }
 
-function interval9(words, user, intervalCount){
+
+function interval9(words, user, intervalCount, form){
     const result5 = words.filter(word => word === "umbrella")
     if(result5.length !== 1){
       if (smallSmile.innerText === '💀'){
@@ -416,58 +422,103 @@ function interval9(words, user, intervalCount){
       }
       else if (smallSmile.innerText === '🤕'){
         smallSmile.innerText = '💀'
-        endGame(user, intervalCount)
+        endGame(user, intervalCount, form)
       }
       else if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
-        youWin(user, intervalCount)
+        youWin(user, intervalCount, form)
       }
       else if(smallSmile.innerText === '😑') {
         smallSmile.innerText = '😔'
-        youWin(user, intervalCount)
+        youWin(user, intervalCount, form)
       }
       else if (smallSmile.innerText === '🙂'){
         smallSmile.innerText = '😑'
-        youWin(user, intervalCount)
+        youWin(user, intervalCount, form)
       }
       else{
         smallSmile.innerText ='🙂'
         smallSmile.id = "small-smile"
       let objectsDiv = document.querySelector("#objects")
       objectsDiv.append(smallSmile)
-      youWin(user, intervalCount)
+      youWin(user, intervalCount, form)
       }
     } else if (result5.length === 1){
-      youWin(user, intervalCount)
+      youWin(user, intervalCount, form)
     }
     
 }
 
-function endGame(user, intervalCount){
+
+function endGame(user, intervalCount, form){
   clearInterval(intervalCount)
-  startBtn.style.visibility = "visible";
-  form.innerHTML = ""
+  
+  // form.innerHTML = ""
   containerImage.src = "/Users/admin/Development/code/javascript-game/front-end/images/gameover-pic.png"
   objectsDiv.innerHTML =""
-  
+  // nameForm.style.visibility = "visible"
 
+  appendName.innerHTML = ""
+  const playAgain = document.createElement("button")
+  playAgain.innerText = "Play Again"
+  appendName.append(playAgain)
+  form.style.visibility = "hidden"
   
   yourScore.innerText = `Your score: ${Number(counter.innerText) * 1000}`
   appendScore.append(yourScore)
 
-console.log("game over")
+  
+  postGame(user)
+
+  playAgain.addEventListener("click", ()=>pageRefresh(playAgain))
+    
 }
 
-function youWin(user, intervalCount){
-  startBtn.style.visibility = "visible";
+
+function youWin(user, intervalCount, form){
+  
   clearInterval(intervalCount)
-  form.innerHTML = ""
+  // form.innerHTML = ""
   containerImage.src = "/Users/admin/Development/code/javascript-game/front-end/images/youwin-pic.png"
+  // nameForm.style.visibility = "visible"
+  appendName.innerHTML = ""
 
+  // nameForm.addEventListener("submit", (e)=> postUserThenRender(e))
+  const playAgain = document.createElement("button")
+  playAgain.innerText = "Play Again"
+  appendName.append(playAgain)
+  form.style.visibility = "hidden"
 
   yourScore.innerText = `Your score: ${Number(counter.innerText) * 1000}`
   appendScore.append(yourScore)
 
-  console.log("you win!")
+  postGame(user)
+
+  playAgain.addEventListener("click", ()=>pageRefresh(playAgain))
+  
 }
 
+function pageRefresh(playAgain){
+  playAgain.remove()
+  location.reload()
+}
+
+
+function postGame(user){
+  let gameDetails = {
+    score: `${Number(counter.innerText) * 1000}`,
+    user_id: user.id
+  }
+
+  let gameObj = {
+    game: gameDetails
+  }
+  
+
+  post(gamesUrl, gameObj)
+  .then(game => renderScores(game))
+}
+
+document.body.onload = getGames
+
+nameForm.addEventListener("submit", (e)=> postUserThenRender(e))
