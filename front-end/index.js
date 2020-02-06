@@ -232,7 +232,7 @@ function incrementCounter(){
 
 function interval1(words){
     const result = words.filter(word => word === "banana")
-    if (result.length !== 1) {
+    if (result === undefined ||result.length == 0) {
 
       smallSmile.innerText = '🙂'
       smallSmile.id = "small-smile"
@@ -245,7 +245,7 @@ function interval1(words){
 
 function interval2(words){
   const result2 = words.filter(word => word === "honey")
-    if (result2.length !== 1) {
+    if (result2 === undefined ||result2.length == 0) {
        if (smallSmile.innerText === '🙂'){
          smallSmile.innerText = '😑'
        }
@@ -261,7 +261,7 @@ function interval2(words){
 
 function interval3(words){
   const result3 = words.filter(word => word === "pop")
-    if (result3.length !== 1) {
+    if (result3 === undefined ||result3.length == 0) {
       if (smallSmile.innerText === '😑'){
         smallSmile.innerText = '😔'
       }
@@ -280,7 +280,7 @@ function interval3(words){
 
 function interval4(words){
     const result4 = words.filter(word => word === "bamboo")
-    if (result4.length !== 1) {
+    if (result4 === undefined ||result4.length == 0) {
       if (smallSmile.innerText === '😔'){
         smallSmile.innerText = '🤕'
       }
@@ -302,7 +302,7 @@ function interval4(words){
 
 function interval5(words, user, intervalCount, form){
     const result5 = words.filter(word => word === "catch")
-    if(result5.length !== 1){
+    if(result5 === undefined ||result5.length == 0){
       if (smallSmile.innerText === '🤕'){
         smallSmile.innerText = '💀'
         endGame(user, intervalCount, form)
@@ -327,8 +327,8 @@ function interval5(words, user, intervalCount, form){
 
 
 function interval6(words, user, intervalCount, form){
-    const result5 = words.filter(word => word === "nut")
-    if(result5.length !== 1){
+    const result6 = words.filter(word => word === "nut")
+    if(result6 === undefined ||result6.length == 0){
       if (smallSmile.innerText === '💀'){
         smallSmile.innerText = '💀'
       }
@@ -356,8 +356,8 @@ function interval6(words, user, intervalCount, form){
 
 
 function interval7(words, user, intervalCount, form){
-    const result5 = words.filter(word => word === "water")
-    if(result5.length !== 1){
+    const result7 = words.filter(word => word === "water")
+    if(result7 === undefined ||result7.length == 0){
       if (smallSmile.innerText === '💀'){
         smallSmile.innerText = '💀'
       }
@@ -385,8 +385,8 @@ function interval7(words, user, intervalCount, form){
 
 
 function interval8(words, user, intervalCount, form){
-    const result5 = words.filter(word => word === "kick")
-    if(result5.length !== 1){
+    const result8 = words.filter(word => word === "kick")
+    if(result8 === undefined ||result8.length == 0){
       if (smallSmile.innerText === '💀'){
         smallSmile.innerText = '💀'
       }
@@ -414,8 +414,8 @@ function interval8(words, user, intervalCount, form){
 
 
 function interval9(words, user, intervalCount, form){
-    const result5 = words.filter(word => word === "umbrella")
-    if(result5.length !== 1){
+    const result9 = words.filter(word => word === "umbrella")
+    if(result9 === undefined ||result9.length == 0){  
       if (smallSmile.innerText === '💀'){
         smallSmile.innerText = '💀'
 
